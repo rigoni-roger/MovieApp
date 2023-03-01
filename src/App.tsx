@@ -5,7 +5,7 @@ import { HomeScreen } from './screens/home/HomeScreen';
 
 function App() {
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex">
       <HomeScreen />
     </Box>
   );
