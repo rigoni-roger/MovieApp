@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import { Box } from '@mui/material';
-import { HomeScreen } from './screens/home/HomeScreen';
+import { HomeScreen } from './screens/discover';
 
 function App() {
   return (
