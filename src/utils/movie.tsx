@@ -4,70 +4,31 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import axios from 'axios';
+import { DataMovies, MovieProps } from './interfaces';
+import { createKeys } from './create-keys';
 
-export interface DataResult {
-  id: number;
-  overview: string;
-  poster_path: string;
-  title: string;
-  release_date: Date;
-}
-
-export interface DataMovies {
-  page: number;
-  results: DataResult[];
-  total_pages: number;
-  total_results: number;
-}
+const API_KEY = 'api_key=0c52f44eabb81b4b7abd8688354d982f';
 
 const API_URL_SEARCH =
   'https://api.themoviedb.org/3/search/movie?api_key=0c52f44eabb81b4b7abd8688354d982f&language=en-US&query=';
 
-const useMovie = (query: string, page = 1) => {
-  const queryClient = useQueryClient();
-  const { data, isLoading, isSuccess, isFetching } = useQuery(
-    ['movies', { query, page }],
-    () =>
-      axios
-        .get<DataMovies>(
-          `${API_URL_SEARCH + encodeURIComponent(query)}&page=${page}`
-        )
-        .then((res) => res.data),
-    {
-      initialData: undefined,
-      keepPreviousData: true,
-      onSuccess: (response) => {
-        const { page: nowPage, total_pages } = response;
-        const nextPage = total_pages - nowPage;
-        if (nextPage > 0) {
-          queryClient.prefetchQuery(['movies', { query, page: page + 1 }], () =>
-            axios
-              .get(
-                `${API_URL_SEARCH + encodeURIComponent(query)}&page=${page + 1}`
-              )
-              .then((res) => res.data)
-          );
-        }
-        return;
-      },
-    }
+const API_URL_MOVIE = 'https://api.themoviedb.org/3/movie/';
+
+const keyMovies = createKeys('movies');
+
+const useMovie = (moveId: string | undefined) => {
+  const queryResults = useQuery(keyMovies.details(moveId), () =>
+    axios
+      .get<MovieProps>(`${API_URL_MOVIE + moveId}?${API_KEY}&language=en-US`)
+      .then((res) => res.data)
   );
-  return { data, isLoading, isSuccess, isFetching };
+  return queryResults;
 };
 
 const useInfiniteManyMovies = (query: string) => {
-  const {
-    data,
-    error,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isSuccess,
-    isFetching,
-  } = useInfiniteQuery(
-    ['movies', { query }],
+  const queryClient = useQueryClient();
+  const queryResults = useInfiniteQuery(
+    keyMovies.infinity(query),
     ({ pageParam = 1 }) =>
       axios
         .get<DataMovies>(
@@ -80,19 +41,19 @@ const useInfiniteManyMovies = (query: string) => {
           ? lastPage.page + 1
           : undefined;
       },
+      onSuccess: (data) => {
+        const lastPage = data.pages.length - 1;
+        data?.pages[lastPage]?.results?.forEach((movie) => {
+          queryClient.setQueryData(
+            keyMovies.details(movie.id.toString()),
+            movie
+          );
+        });
+      },
+      keepPreviousData: true,
     }
   );
-  return {
-    data,
-    isLoading,
-    isSuccess,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    error,
-    isError,
-  };
+  return queryResults;
 };
 
 export { useMovie, useInfiniteManyMovies };

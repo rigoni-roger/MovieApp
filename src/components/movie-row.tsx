@@ -4,8 +4,9 @@ import { Box, Paper, Typography } from '@mui/material';
 import { DataResult } from '../utils/movie';
 import movieLoading from '../imgs/movieLoading.svg';
 import movieError from '../imgs/movieError.svg';
+import { Link } from 'react-router-dom';
 
-const Movie = React.forwardRef(({ movie }: { movie: DataResult }, ref) => {
+const Movie = React.forwardRef(({ movie }: { movie: DataResult }) => {
   const [mouseEnter, setMouseEnter] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
 
@@ -33,48 +34,46 @@ const Movie = React.forwardRef(({ movie }: { movie: DataResult }, ref) => {
       onMouseEnter={handleOnMouseEnter}
       onMouseLeave={handleOnMouseLeave}
     >
-      <Paper
-        ref={ref ?? null}
-        elevation={mouseEnter ? 7 : 4}
-        sx={{ width: 220, height: 330 }}
-      >
-        {loaded ? null : (
+      <Link to={`/movie/${movie.id}`}>
+        <Paper elevation={mouseEnter ? 7 : 4} sx={{ width: 220, height: 330 }}>
+          {loaded ? null : (
+            <img
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'fill',
+              }}
+              alt="loading-img"
+              src={movieLoading}
+            />
+          )}
           <img
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'fill',
-            }}
-            alt="loading-img"
-            src={movieLoading}
+            style={
+              loaded
+                ? nullImg
+                  ? {
+                      height: '100%',
+                      width: '60%',
+                      objectFit: 'fill',
+                    }
+                  : {
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'fill',
+                      filter: mouseEnter ? 'brightness(1.1)' : 'none',
+                    }
+                : { display: 'none' }
+            }
+            onLoad={onLoad}
+            alt="img"
+            src={
+              movie.poster_path
+                ? `https://image.tmdb.org/t/p/w220_and_h330_face/${movie?.poster_path}`
+                : movieError
+            }
           />
-        )}
-        <img
-          style={
-            loaded
-              ? nullImg
-                ? {
-                    height: '100%',
-                    width: '60%',
-                    objectFit: 'fill',
-                  }
-                : {
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'fill',
-                    filter: mouseEnter ? 'brightness(1.1)' : 'none',
-                  }
-              : { display: 'none' }
-          }
-          onLoad={onLoad}
-          alt="img"
-          src={
-            movie.poster_path
-              ? `https://image.tmdb.org/t/p/w220_and_h330_face/${movie?.poster_path}`
-              : movieError
-          }
-        />
-      </Paper>
+        </Paper>
+      </Link>
       <Typography
         sx={{
           maxWidth: '200px',

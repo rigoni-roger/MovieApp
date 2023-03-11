@@ -4,7 +4,14 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { refetchOnWindowFocus: false, retry: 1 } },
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 1000 * 60 * 60,
+      cacheTime: 1000 * 60 * 60,
+    },
+  },
 });
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -19,15 +26,3 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default AppProvider;
-
-// const queryConfig = {
-//   queries: {
-//     useErrorBoundary: true,
-//     refetchOnWindowFocus: false,
-//     retry(failureCount: number, error: any) {
-//       if (error.status === 404) return false;
-//       else if (failureCount < 2) return true;
-//       else return false;
-//     },
-//   },
-// };

@@ -7,13 +7,12 @@ import { useForm } from 'react-hook-form';
 import debounce from 'lodash.debounce';
 import MovieList from '../components/movie-list';
 
-export const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC = () => {
   const [query, setQuery] = React.useState('');
   const { register, handleSubmit } = useForm({ defaultValues: { search: '' } });
   const [queried, setQueried] = React.useState(false);
   const { data, isLoading, isFetching, isSuccess, hasNextPage, fetchNextPage } =
     useInfiniteManyMovies(query);
-
   const pages = data?.pages;
 
   const onSubmit = ({ search }: { search: string }) => {
@@ -57,11 +56,11 @@ export const HomeScreen: React.FC = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading the search screen...</p>;
 
   return (
     <Box
-      p={'30px 50px'}
+      p={'30px 0px'}
       display="flex"
       flexDirection="column"
       gap={5}
@@ -86,8 +85,7 @@ export const HomeScreen: React.FC = () => {
             placeholder="Search a movie"
             sx={{ flex: 1, ml: 1 }}
             inputProps={{ 'aria-label': 'search movie' }}
-            {...(register('search'),
-            {
+            {...register('search', {
               onChange: debounceUpdateQuery,
             })}
           />
@@ -109,9 +107,8 @@ export const HomeScreen: React.FC = () => {
       {queried ? (
         <Box display="flex" justifyContent="center">
           {isSuccess ? (
-            pages && pages[0].results.length > 0 ? (
-              <p>There is your results...</p>
-            ) : !!isFetching ? null : (
+            pages &&
+            pages[0].results.length > 0 ? null : !!isFetching ? null : (
               <p>Sorry, we don`t have this movie. Try another.</p>
             )
           ) : null}
@@ -121,7 +118,6 @@ export const HomeScreen: React.FC = () => {
           <p>Search for some movie...</p>
         </Box>
       )}
-
       <Box
         sx={{
           display: 'flex',
@@ -142,3 +138,5 @@ export const HomeScreen: React.FC = () => {
     </Box>
   );
 };
+
+export default HomeScreen;
