@@ -39,16 +39,16 @@ const BilledCast = ({
           {actorsTopBilled &&
             actorsTopBilled.map((actor) => {
               const nullImg = actor.profile_path === null;
-              if (countTopBilled < 15) {
+              if (countTopBilled < 15 && !!actor.id) {
                 countTopBilled++;
                 return (
-                  <Box width="138px">
+                  <Box key={countTopBilled} width="138px">
                     <Box
                       width="138px"
                       height="175px"
                       display="flex"
                       alignItems="center"
-                      justifyContent='center'
+                      justifyContent="center"
                       sx={{
                         borderRadius: '10px',
                         boxShadow: '0px 0px 7px 2px rgba(0,0,0,0.46)',

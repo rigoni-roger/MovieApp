@@ -1,12 +1,12 @@
 //@ts-nocheck
 import React from 'react';
 import { Box, Paper, Typography } from '@mui/material';
-import { DataResult } from '../utils/movie';
-import movieLoading from '../imgs/movieLoading.svg';
-import movieError from '../imgs/movieError.svg';
+import { DataResult } from '../../../utils/interfaces';
+import movieLoading from '../../../imgs/movieLoading.svg';
+import movieError from '../../../imgs/movieError.svg';
 import { Link } from 'react-router-dom';
 
-const Movie = React.forwardRef(({ movie }: { movie: DataResult }) => {
+const Movie = ({ movie }: { movie: DataResult }) => {
   const [mouseEnter, setMouseEnter] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
 
@@ -87,5 +87,5 @@ const Movie = React.forwardRef(({ movie }: { movie: DataResult }) => {
       </Typography>
     </Box>
   );
-});
+};
 export default Movie;

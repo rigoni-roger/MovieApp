@@ -61,6 +61,7 @@ const MovieInformationText = ({
               countActor++;
               return (
                 <Box
+                  key={countActor}
                   display="flex"
                   flexDirection="column"
                   sx={{ minWidth: '31%' }}
