@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './app';
+import App from './app-movie';
 import LoadPage from './components/load-page';
 import AppProvider from './context/index';
 
