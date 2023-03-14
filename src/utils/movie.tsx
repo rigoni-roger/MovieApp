@@ -4,7 +4,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import axios from 'axios';
-import { DataMovies, MovieProps } from './interfaces';
+import { CreditProps, DataMovies, MovieProps } from './interfaces';
 import { createKeys } from './create-keys';
 
 const API_KEY = 'api_key=0c52f44eabb81b4b7abd8688354d982f';
@@ -15,11 +15,23 @@ const API_URL_SEARCH =
 const API_URL_MOVIE = 'https://api.themoviedb.org/3/movie/';
 
 const keyMovies = createKeys('movies');
+const keyCredits = createKeys('credits');
 
 const useMovie = (moveId: string | undefined) => {
   const queryResults = useQuery(keyMovies.details(moveId), () =>
     axios
       .get<MovieProps>(`${API_URL_MOVIE + moveId}?${API_KEY}&language=en-US`)
+      .then((res) => res.data)
+  );
+  return queryResults;
+};
+
+const useCreditMovie = (moveId: string | undefined) => {
+  const queryResults = useQuery(keyCredits.details(moveId), () =>
+    axios
+      .get<CreditProps>(
+        `${API_URL_MOVIE + moveId}/credits?${API_KEY}&language=en-US`
+      )
       .then((res) => res.data)
   );
   return queryResults;
@@ -56,4 +68,4 @@ const useInfiniteManyMovies = (query: string) => {
   return queryResults;
 };
 
-export { useMovie, useInfiniteManyMovies };
+export { useMovie, useInfiniteManyMovies, useCreditMovie };

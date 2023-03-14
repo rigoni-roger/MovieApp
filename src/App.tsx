@@ -5,7 +5,7 @@ import HomeScreen from './screens/discover';
 import { Route, Routes } from 'react-router-dom';
 
 const MovieScreen = React.lazy(
-  () => import(/* webpackPrefetch: true*/ './screens/movie')
+  () => import(/* webpackPrefetch: true*/ './screens/movie/movie')
 );
 const PageNotFound = React.lazy(
   () => import(/* webpackPrefetch: true*/ './screens/page-not-found')
@@ -13,14 +13,12 @@ const PageNotFound = React.lazy(
 
 function App() {
   return (
-    <Box display="flex">
-      <Box flex={4}>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/movie/:movieId" element={<MovieScreen />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Box>
+    <Box>
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/movie/:movieId" element={<MovieScreen />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </Box>
   );
 }

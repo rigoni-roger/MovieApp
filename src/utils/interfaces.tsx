@@ -2,6 +2,7 @@ export interface DataResult {
   id: number;
   title: string;
   poster_path: string;
+  backdrop_path: string;
   overview: string;
   release_date: string;
   tagline: string;
@@ -22,5 +23,20 @@ export interface MovieProps {
   overview: string;
   release_date: string;
   tagline: string;
+  backdrop_path: string;
+
   vote_average: number;
+}
+
+export interface ActorProps {
+  id: unknown;
+  name: string;
+  popularity: number;
+  profile_path: string | null;
+  character: string;
+}
+
+export interface CreditProps {
+  id: unknown;
+  cast: ActorProps[];
 }

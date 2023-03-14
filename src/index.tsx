@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app';
+import LoadPage from './components/load-page';
 import AppProvider from './context/index';
 
 const root = ReactDOM.createRoot(
@@ -9,7 +10,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AppProvider>
-      <React.Suspense fallback={<p>Loading the Page...</p>}>
+      <React.Suspense fallback={<LoadPage />}>
         <App />
       </React.Suspense>
     </AppProvider>

@@ -2,10 +2,11 @@ import React from 'react';
 import { Box, IconButton, InputBase, Paper } from '@mui/material';
 import { Search, HourglassEmpty } from '@mui/icons-material';
 
-import { useInfiniteManyMovies } from '../utils/movie';
+import { useInfiniteManyMovies } from '../../utils/movie';
 import { useForm } from 'react-hook-form';
 import debounce from 'lodash.debounce';
-import MovieList from '../components/movie-list';
+import MovieList from './movie-list';
+import LoadPage from '../../components/load-page';
 
 const HomeScreen: React.FC = () => {
   const [query, setQuery] = React.useState('');
@@ -56,7 +57,7 @@ const HomeScreen: React.FC = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  if (isLoading) return <p>Loading the search screen...</p>;
+  if (isLoading) return <LoadPage />;
 
   return (
     <Box
@@ -107,8 +108,9 @@ const HomeScreen: React.FC = () => {
       {queried ? (
         <Box display="flex" justifyContent="center">
           {isSuccess ? (
-            pages &&
-            pages[0].results.length > 0 ? null : !!isFetching ? null : (
+            pages && pages[0].results.length > 0 ? null : !!isFetching ? (
+              <LoadPage />
+            ) : (
               <p>Sorry, we don`t have this movie. Try another.</p>
             )
           ) : null}
